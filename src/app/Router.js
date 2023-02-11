@@ -10,21 +10,38 @@ import DashboardUI from "../views/DashboardUI.js"
 import { ROUTES, ROUTES_PATH } from "../constants/routes.js"
 
 export default () => {
+
+  console.log('in router.js')
+
+
   const rootDiv = document.getElementById('root')
+  console.log('root div', rootDiv)
+  console.log('window.location', window.location)
+  console.log('window.location.pathname', window.location.pathname)
+
+
   rootDiv.innerHTML = ROUTES({ pathname: window.location.pathname })
 
   window.onNavigate = (pathname) => {
-
+    console.log('onNavigate ====================================', pathname)
+    
     window.history.pushState(
       {},
       pathname,
-      window.location.origin + pathname
+      window.location.href+pathname 
     )
     if (pathname === ROUTES_PATH['Login']) {
+
+
+      console.log('in login')
+
       rootDiv.innerHTML = ROUTES({ pathname })
       document.body.style.backgroundColor="#0E5AE5"
       new Login({ document, localStorage, onNavigate, PREVIOUS_LOCATION, store })
     } else if (pathname === ROUTES_PATH['Bills']) {
+
+      console.log('Bills')
+      
       rootDiv.innerHTML = ROUTES({ pathname, loading: true })
       const divIcon1 = document.getElementById('layout-icon1')
       const divIcon2 = document.getElementById('layout-icon2')
@@ -42,6 +59,10 @@ export default () => {
         rootDiv.innerHTML = ROUTES({ pathname, error })
       })
     } else if (pathname === ROUTES_PATH['NewBill']) {
+
+      console.log('new bill')
+
+
       rootDiv.innerHTML = ROUTES({ pathname, loading: true })
       new NewBill({ document, onNavigate, store, localStorage })
       const divIcon1 = document.getElementById('layout-icon1')
@@ -49,6 +70,11 @@ export default () => {
       divIcon1.classList.remove('active-icon')
       divIcon2.classList.add('active-icon')
     } else if (pathname === ROUTES_PATH['Dashboard']) {
+
+
+      console.log('Dashboard')
+
+
       rootDiv.innerHTML = ROUTES({ pathname, loading: true })
       const bills = new Dashboard({ document, onNavigate, store, bills: [], localStorage })
       bills.getBillsAllUsers().then(bills => {
@@ -61,6 +87,8 @@ export default () => {
   }
 
   window.onpopstate = (e) => {
+    console.log('onpopstate', e)
+    
     const user = JSON.parse(localStorage.getItem('user'))
     if (window.location.pathname === "/" && !user) {
       document.body.style.backgroundColor="#0E5AE5"
@@ -71,10 +99,18 @@ export default () => {
     }
   }
 
-  if (window.location.pathname === "/" && window.location.hash === "") {
+  if (window.location.pathname === "/" || window.location.hash === "") {
+    console.log('in if block, window.location.hash', window.location.hash)
+
+
     new Login({ document, localStorage, onNavigate, PREVIOUS_LOCATION, store })
     document.body.style.backgroundColor="#0E5AE5"
+
   } else if (window.location.hash !== "") {
+
+
+    console.log('in else block, window.location.hash', window.location.hash)
+
     if (window.location.hash === ROUTES_PATH['Bills']) {
       rootDiv.innerHTML = ROUTES({ pathname: window.location.hash, loading: true })
       const divIcon1 = document.getElementById('layout-icon1')
@@ -110,7 +146,8 @@ export default () => {
       })
     }
   }
+  console.log('out of router.js')
 
-  return null
+ return null
 }
 

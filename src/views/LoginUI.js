@@ -1,6 +1,9 @@
 
 export default () => {
 
+  console.log('in LoginUI.js');
+
+
   return(`
       <div class="page-div">
         <div class="row">
