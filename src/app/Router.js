@@ -60,7 +60,7 @@ export default () => {
       })
     } else if (pathname === ROUTES_PATH['NewBill']) {
 
-      console.log('new bill')
+      console.log('======> new bill')
 
 
       rootDiv.innerHTML = ROUTES({ pathname, loading: true })
