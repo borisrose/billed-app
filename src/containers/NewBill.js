@@ -18,6 +18,10 @@ export default class NewBill {
   handleChangeFile = e => {
     e.preventDefault()
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+
+    if(! file.endsWith('.jpg') || ! file.endsWith('.jpeg') || ! file.endsWith('.png')){
+      return
+    }
     const filePath = e.target.value.split(/\\/g)
     console.log('filePath', filePath)
     const fileName = filePath[filePath.length-1]
