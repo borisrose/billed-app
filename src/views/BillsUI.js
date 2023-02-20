@@ -21,18 +21,7 @@ const row = (bill) => {
 
 const rows = (data) => {
 
-  // if(data){
-  //   data = data
-  // }
 
-  // const rows = (data) => {
-  //   return data && data.length
-  //     ? data
-  //         .sort((billA, billB) => (billA.date < billB.date ? 1 : -1))
-  //         .map((bill) => row(bill))
-  //         .join("")
-  //     : "";
-  // };
 
 
   return (data && data.length) ? data.sort((a, b) => ((a.date < b.date) ? 1 : -1)).map(bill => row(bill)).join("") : ""
@@ -41,7 +30,7 @@ const rows = (data) => {
 export default ({ data: bills, loading, error }) => {
   
   const modal = () => (`
-    <div class="modal fade" id="modaleFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="modaleFile" data-testid="modaleFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">

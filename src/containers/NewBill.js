@@ -2,6 +2,7 @@ import { ROUTES_PATH } from '../constants/routes.js'
 import Logout from "./Logout.js"
 
 export default class NewBill {
+
   constructor({ document, onNavigate, store, localStorage }) {
     this.document = document
     this.onNavigate = onNavigate
@@ -10,44 +11,51 @@ export default class NewBill {
     formNewBill.addEventListener("submit", this.handleSubmit)
     const file = this.document.querySelector(`input[data-testid="file"]`)
     file.addEventListener("change", this.handleChangeFile)
-    // this.fileUrl = null
-    // this.fileName = null
-    // this.billId = null
+    this.fileUrl = null
+    this.fileName = null
+    this.billId = null
     new Logout({ document, localStorage, onNavigate })
   }
+
+
   handleChangeFile = e => {
     e.preventDefault()
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
 
-    if(! file.endsWith('.jpg') || ! file.endsWith('.jpeg') || ! file.endsWith('.png')){
-      return
-    }
-    const filePath = e.target.value.split(/\\/g)
-    console.log('filePath', filePath)
-    const fileName = filePath[filePath.length-1]
-    const formData = new FormData()
-    const email = JSON.parse(localStorage.getItem("user")).email
-    formData.append('file', file)
-    formData.append('email', email)
+    console.log('file', file)
 
-    this.store
-      .bills()
-      .create({
-        data: formData,
-        headers: {
-          noContentType: true
-        }
-      })
-      .then(({fileUrl, key}) => {
-        console.log(fileUrl)
-        this.billId = key
-        this.fileUrl = fileUrl
-        this.fileName = fileName
-      }).catch(error => console.error(error))
+
+    if(file.name.endsWith('.jpg') || file.name.endsWith('.jpeg') || file.name.endsWith('.png')){
+
+      const filePath = e.target.value.split(/\\/g)
+      console.log('filePath', filePath)
+      const fileName = filePath[filePath.length-1]
+      const formData = new FormData()
+      const email = JSON.parse(localStorage.getItem("user")).email
+      formData.append('file', file)
+      formData.append('email', email)
+  
+      this.store
+        .bills()
+        .create({
+          data: formData,
+          headers: {
+            noContentType: true
+          }
+        })
+        .then(({fileUrl, key}) => {
+          console.log(fileUrl)
+          this.billId = key
+          this.fileUrl = fileUrl
+          this.fileName = fileName
+        }).catch(error => console.error(error))
+      
+    }
+  
   }
   handleSubmit = e => {
     e.preventDefault()
-    console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
+    // // console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
     const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
       email,

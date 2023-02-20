@@ -13,24 +13,23 @@ export const ROUTES_PATH = {
 export const ROUTES = ({ pathname, data, error, loading }) => {
   switch (pathname) {
     case ROUTES_PATH['Login']:
-      console.log('Login')
+
       return LoginUI({ data, error, loading })
     case ROUTES_PATH['Bills']:
-      console.log('Bills')
+
       
       return BillsUI({ data, error, loading })
     case ROUTES_PATH['NewBill']:
-      console.log('New Bill')
+    
       
       return NewBillUI()
     case ROUTES_PATH['Dashboard']:
-      console.log('dashboard')
+
 
       
       return DashboardUI({ data, error, loading })
     default:
-      console.log('in routes.js')
-      console.log('default')
+  
       
       return LoginUI()
   }
