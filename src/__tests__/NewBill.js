@@ -109,7 +109,7 @@ describe("Given I am connected as an employee", () => {
         });
 
         // For wrong file type
-        const wrongFakeFile = new File(["uWu"], "fakeFile.gif", {
+        const wrongFakeFile = new File(["boris"], "fakeFile.gif", {
           type: "image/gif",
         });
         fireEvent.change(fileInput, {
