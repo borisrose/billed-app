@@ -6,6 +6,8 @@ import USERS_TEST from '../constants/usersTest.js'
 import Logout from "./Logout.js"
 
 export const filteredBills = (data, status) => {
+
+ 
   return (data && data.length) ?
     data.filter(bill => {
       let selectCondition
@@ -13,14 +15,18 @@ export const filteredBills = (data, status) => {
       // in jest environment
       if (typeof jest !== 'undefined') {
         selectCondition = (bill.status === status)
+        console.log('on est en environnement de test', selectCondition)
       }
       /* istanbul ignore next */
       else {
         // in prod environment
+        console.log('on est en environnement de production', selectCondition)
         const userEmail = JSON.parse(localStorage.getItem("user")).email
         selectCondition =
           (bill.status === status) &&
           ![...USERS_TEST, userEmail].includes(bill.email)
+
+       
       }
 
       return selectCondition
@@ -86,25 +92,52 @@ export default class {
   }
 
   handleEditTicket(e, bill, bills) {
-    if (this.counter === undefined || this.id !== bill.id) this.counter = 0
-    if (this.id === undefined || this.id !== bill.id) this.id = bill.id
+
+
+
+    console.log('tu viens de cliquer sur un ticket en particulier', bill)
+
+
+    if (this.counter === undefined || this.id !== bill.id){
+
+      console.log('le compteur est soit indéfini soit id est différent du bill.id')
+
+      this.counter = 0
+
+    } 
+    if (this.id === undefined || this.id !== bill.id){
+      
+      console.log('this.id est indéfini soit id est différent du bill.id')
+
+      this.id = bill.id
+
+    }
     if (this.counter % 2 === 0) {
+
+      console.log('le compteur  est pair ')
+
       bills.forEach(b => {
+
+        console.log('action sur toutes les bills')
         $(`#open-bill${b.id}`).css({ background: '#0D5AE5' })
       })
       $(`#open-bill${bill.id}`).css({ background: '#2A2B35' })
       $('.dashboard-right-container div').html(DashboardFormUI(bill))
       $('.vertical-navbar').css({ height: '150vh' })
-      this.counter ++
+      this.counter++;
     } else {
+
+      console.log('le compteur est impair')
+
       $(`#open-bill${bill.id}`).css({ background: '#0D5AE5' })
 
       $('.dashboard-right-container div').html(`
         <div id="big-billed-icon" data-testid="big-billed-icon"> ${BigBilledIcon} </div>
       `)
       $('.vertical-navbar').css({ height: '120vh' })
-      this.counter ++
+      this.counter++;
     }
+
     $('#icon-eye-d').click(this.handleClickIconEye)
     $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill))
     $('#btn-refuse-bill').click((e) => this.handleRefuseSubmit(e, bill))
@@ -131,25 +164,52 @@ export default class {
   }
 
   handleShowTickets(e, bills, index) {
-    if (this.counter === undefined || this.index !== index) this.counter = 0
-    if (this.index === undefined || this.index !== index) this.index = index
+
+    console.log('chaque categorie a son HST, vérifiez le statut des bills concernées ', bills)
+
+    console.log('tu viens de cliquer sur la flèche')
+   
+    if (this.counter === undefined || this.index !== index) {
+
+      //console.log('situation 1  this.counter undefined ou this.index différent de index')
+      console.log('voir les tickets')
+
+      this.counter = 0
+
+    
+    
+    }
+    if (this.index === undefined || this.index !== index) {
+      
+      console.log('situation 2  this.index = undefined ou this.index différent de index')
+      console.log('oubli du counter mais valeur de counter', this.counter)
+      this.index = index
+
+    }
+
     if (this.counter % 2 === 0) {
+
+      console.log('tickets déjà visibles on ne veut plus les voir')
+
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
       $(`#status-bills-container${this.index}`)
         .html(cards(filteredBills(bills, getStatus(this.index))))
       this.counter ++
     } else {
+
+      console.log('tickets non visibles on veut les voir')
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
       $(`#status-bills-container${this.index}`)
         .html("")
       this.counter ++
     }
 
-    bills.forEach(bill => {
+    bills.filter(bill => bill.status === getStatus(index)).forEach(bill => {
+
       $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
     })
 
-    return bills
+   return bills
 
   }
 

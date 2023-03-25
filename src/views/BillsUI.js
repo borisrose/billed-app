@@ -20,7 +20,7 @@ const row = (bill) => {
   }
 
 const rows = (data) => {
-  const chrono = (a, b) => ((a.date > b.date) ? 1 : -1)
+  const chrono = (a, b) => ((a.date < b.date) ? 1 : -1)
   return (data && data.length) ? 
   data.sort(chrono)
       .map(bill => row(bill)).join("") : ""
